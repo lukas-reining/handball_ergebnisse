@@ -18,10 +18,11 @@ import 'package:handball_ergebnisse/domain/repositories/favorite_leagues.dart';
 import 'package:handball_ergebnisse/domain/repositories/game.dart';
 import 'package:handball_ergebnisse/domain/repositories/league.dart';
 import 'package:handball_ergebnisse/domain/repositories/team.dart';
-import 'package:handball_ergebnisse/infrastructure/repositories/shared_pref_favorite_leagues.dart';
 import 'package:handball_ergebnisse/pages/home/home.dart';
 
 import 'bloc/domain/sports_hall_bloc.dart';
+import 'infrastructure/notifications/notification_registration_service.dart';
+import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_favorite_leagues.dart';
 import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_season.dart';
 import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_association.dart';
 import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_district.dart';
@@ -29,9 +30,20 @@ import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_game.
 import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_league.dart';
 import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_team.dart';
 
+void registerNotifications() async {
+  final notificationRegistrationService = NotificationRegistrationService();
+
+  if (!await notificationRegistrationService.isRegistered()) {
+    await notificationRegistrationService.registerDevice();
+  }
+
+  await notificationRegistrationService.refreshRegistration();
+}
+
 void main() {
   initializeDateFormatting("de_DE")
-      .then((value) => runApp(HandballErgebnisseApp()));
+      .then((value) => runApp(HandballErgebnisseApp()))
+      .then((value) => registerNotifications());
 }
 
 class HandballErgebnisseApp extends StatelessWidget {
@@ -42,7 +54,8 @@ class HandballErgebnisseApp extends StatelessWidget {
   final teamRepository = HandballErgebnisseTeamRepository();
   final gameRepository = HandballErgebnisseGameRepository();
   final sportsHallRepository = HandballErgebnisseSportsHallRepository();
-  final favoriteLeaguesRepository = SharedPrefFavoriteLeaguesRepository();
+  final favoriteLeaguesRepository =
+      HandballErgebnisseFavoriteLeaguesRepository();
 
   int primaryColorHex = 0xFF139917;
   Map<int, Color> color = {

@@ -14,6 +14,9 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		A8683416E1F23A8CD2F5D2CD /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70B3B177BE9D868C55C4C144 /* Pods_Runner.framework */; };
+		D8A442B12843E50D00C3F555 /* DeviceInstallationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A442B02843E50D00C3F555 /* DeviceInstallationService.swift */; };
+		D8A442B32843E53700C3F555 /* NotificationRegistrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A442B22843E53700C3F555 /* NotificationRegistrationService.swift */; };
+		D8A442B52843E59300C3F555 /* NotificationActionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A442B42843E59300C3F555 /* NotificationActionService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,6 +49,10 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D892E3202802412B00A402C3 /* RunnerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerRelease.entitlements; sourceTree = "<group>"; };
+		D8A442B02843E50D00C3F555 /* DeviceInstallationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInstallationService.swift; sourceTree = "<group>"; };
+		D8A442B22843E53700C3F555 /* NotificationRegistrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRegistrationService.swift; sourceTree = "<group>"; };
+		D8A442B42843E59300C3F555 /* NotificationActionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationActionService.swift; sourceTree = "<group>"; };
+		D8A442B6284404B000C3F555 /* RunnerDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerDebug.entitlements; sourceTree = "<group>"; };
 		F77153D7F442A81CDE961118 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		FD5CE14C530E35CE66F444C5 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,6 +110,8 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				D8A442B6284404B000C3F555 /* RunnerDebug.entitlements */,
+				D8A442AF2843E4D500C3F555 /* Services */,
 				D892E3202802412B00A402C3 /* RunnerRelease.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -124,6 +133,16 @@
 				FD5CE14C530E35CE66F444C5 /* Pods-Runner.profile.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		D8A442AF2843E4D500C3F555 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D8A442B02843E50D00C3F555 /* DeviceInstallationService.swift */,
+				D8A442B22843E53700C3F555 /* NotificationRegistrationService.swift */,
+				D8A442B42843E59300C3F555 /* NotificationActionService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,7 +293,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				D8A442B12843E50D00C3F555 /* DeviceInstallationService.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				D8A442B32843E53700C3F555 /* NotificationRegistrationService.swift in Sources */,
+				D8A442B52843E59300C3F555 /* NotificationActionService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,6 +507,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDebug.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = QPZS84757G;
 				ENABLE_BITCODE = NO;
