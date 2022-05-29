@@ -56,6 +56,10 @@ class NotificationRegistrationService {
       final platform = await _deviceInstallationService.getDevicePlatform();
       final token = await _deviceInstallationService.getDeviceToken();
 
+      print(deviceId);
+      print(platform);
+      print(token);
+
       final deviceInstallation = DeviceInstallation(
         deviceId,
         platform,
@@ -112,7 +116,6 @@ class NotificationRegistrationService {
         return refreshRegistration();
       default:
         throw MissingPluginException();
-        break;
     }
   }
 }
