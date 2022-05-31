@@ -23,9 +23,6 @@ class MainActivity : FlutterActivity() {
             PushNotificationsFirebaseMessagingService.notificationRegistrationService = NotificationRegistrationService(it)
         }
 
-        println("**************")
-        println(deviceInstallationService.playServicesAvailable)
-
         if (deviceInstallationService.playServicesAvailable) {
             FirebaseMessaging.getInstance().token
                     .addOnCompleteListener(OnCompleteListener { task ->

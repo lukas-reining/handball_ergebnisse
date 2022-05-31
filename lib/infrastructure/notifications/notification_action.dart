@@ -1,1 +1,0 @@
-enum NotificationAction { actionA, actionB }

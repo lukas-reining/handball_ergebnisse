@@ -20,10 +20,10 @@ class NotificationRegistrationService {
 
   NotificationRegistrationService() {
     _notificationRegistration
-        .setMethodCallHandler(handleNotificationRegistrationCall);
+        .setMethodCallHandler(_handleNotificationRegistrationCall);
   }
 
-  String get installationsUrl =>
+  String get _installationsUrl =>
       "${HandballErgebnisseApiHttpClient.BASE_URL}/notifications/installations";
 
   Future<void> deregisterDevice() async {
@@ -40,7 +40,7 @@ class NotificationRegistrationService {
       throw "Unable to resolve an ID for the device.";
     }
 
-    var response = await http.delete(Uri.parse("$installationsUrl/$deviceId"));
+    var response = await http.delete(Uri.parse("$_installationsUrl/$deviceId"));
 
     if (response.statusCode != 200) {
       throw "Deregister request failed: ${response.reasonPhrase}";
@@ -56,10 +56,6 @@ class NotificationRegistrationService {
       final platform = await _deviceInstallationService.getDevicePlatform();
       final token = await _deviceInstallationService.getDeviceToken();
 
-      print(deviceId);
-      print(platform);
-      print(token);
-
       final deviceInstallation = DeviceInstallation(
         deviceId,
         platform,
@@ -68,12 +64,15 @@ class NotificationRegistrationService {
       );
 
       final response = await http.post(
-        Uri.parse(installationsUrl),
+        Uri.parse(_installationsUrl),
         body: jsonEncode(deviceInstallation),
         headers: {"Content-Type": "application/json"},
       );
 
       if (response.statusCode != 201) {
+        await _secureStorage.delete(key: _cachedDeviceTokenKey);
+        await _secureStorage.delete(key: _cachedTagsKey);
+
         throw "Register request failed: ${response.reasonPhrase}";
       }
 
@@ -81,11 +80,13 @@ class NotificationRegistrationService {
 
       await _secureStorage.write(key: _cachedDeviceTokenKey, value: token);
       await _secureStorage.write(key: _cachedTagsKey, value: serializedTags);
+
+      print("Subscribed to notifications with $deviceId to tags: $tags");
     } on PlatformException catch (e) {
       print(e);
       throw e;
     } catch (e) {
-      throw "Unable to register device: $e";
+      throw "Unable to register device for notifications: $e";
     }
   }
 
@@ -110,7 +111,7 @@ class NotificationRegistrationService {
     return cachedToken != null;
   }
 
-  Future<void> handleNotificationRegistrationCall(MethodCall call) async {
+  Future<void> _handleNotificationRegistrationCall(MethodCall call) async {
     switch (call.method) {
       case _refreshRegistrationChannelMethod:
         return refreshRegistration();

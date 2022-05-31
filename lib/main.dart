@@ -21,6 +21,7 @@ import 'package:handball_ergebnisse/domain/repositories/team.dart';
 import 'package:handball_ergebnisse/pages/home/home.dart';
 
 import 'bloc/domain/sports_hall_bloc.dart';
+import 'infrastructure/notifications/notification_action_service.dart';
 import 'infrastructure/notifications/notification_registration_service.dart';
 import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_favorite_leagues.dart';
 import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_season.dart';
@@ -30,14 +31,21 @@ import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_game.
 import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_league.dart';
 import 'infrastructure/repositories/handballergebnisse/handball_ergebnisse_team.dart';
 
-void registerNotifications() async {
-  final notificationRegistrationService = NotificationRegistrationService();
+final notificationRegistrationService = NotificationRegistrationService();
+final notificationActionService = NotificationActionService();
 
+void registerNotifications() async {
   if (!await notificationRegistrationService.isRegistered()) {
     await notificationRegistrationService.registerDevice();
+  } else {
+    await notificationRegistrationService.refreshRegistration();
   }
 
-  await notificationRegistrationService.refreshRegistration();
+  notificationActionService.actionTriggered.listen((event) {
+    print(event);
+  });
+
+  await notificationActionService.checkLaunchAction();
 }
 
 void main() {
@@ -47,6 +55,8 @@ void main() {
 }
 
 class HandballErgebnisseApp extends StatelessWidget {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   final seasonRepository = HandballErgebnisseSeasonRepository();
   final associationRepository = HandballErgebnisseAssociationRepository();
   final districtRepository = HandballErgebnisseDistrictRepository();
@@ -153,6 +163,7 @@ class HandballErgebnisseApp extends StatelessWidget {
             ),
           ),
           home: HomePage(),
+          navigatorKey: navigatorKey,
         ),
       ),
     );

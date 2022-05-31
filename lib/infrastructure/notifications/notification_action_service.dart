@@ -1,48 +1,37 @@
 import 'package:flutter/services.dart';
 import 'dart:async';
 
-import 'notification_action.dart';
-
 class NotificationActionService {
-  static const notificationAction = const MethodChannel(
+  static const _notificationAction = const MethodChannel(
       'de.lukasreining.handball_ergebnisse/notifications_action');
-  static const String triggerActionChannelMethod = "triggerAction";
-  static const String getLaunchActionChannelMethod = "getLaunchAction";
+  static const String _triggerActionChannelMethod = "triggerAction";
+  static const String _getLaunchActionChannelMethod = "getLaunchAction";
 
-  final actionMappings = {
-    'action_a': NotificationAction.actionA,
-    'action_b': NotificationAction.actionB
-  };
-
-  final actionTriggeredController = StreamController.broadcast();
+  final _actionTriggeredController = StreamController.broadcast();
 
   NotificationActionService() {
-    notificationAction.setMethodCallHandler(handleNotificationActionCall);
+    _notificationAction.setMethodCallHandler(_handleNotificationActionCall);
   }
 
-  Stream get actionTriggered => actionTriggeredController.stream;
+  Stream get actionTriggered => _actionTriggeredController.stream;
 
-  Future<void> triggerAction({action: String}) async {
-    if (!actionMappings.containsKey(action)) {
-      return;
-    }
-
-    actionTriggeredController.add(actionMappings[action]);
+  Future<void> _triggerAction({action: String}) async {
+    _actionTriggeredController.add(action);
   }
 
   Future<void> checkLaunchAction() async {
-    final launchAction = await notificationAction
-        .invokeMethod<String>(getLaunchActionChannelMethod);
+    final launchAction = await _notificationAction
+        .invokeMethod<String>(_getLaunchActionChannelMethod);
 
     if (launchAction != null) {
-      triggerAction(action: launchAction);
+      _triggerAction(action: launchAction);
     }
   }
 
-  Future<void> handleNotificationActionCall(MethodCall call) async {
+  Future<void> _handleNotificationActionCall(MethodCall call) async {
     switch (call.method) {
-      case triggerActionChannelMethod:
-        return triggerAction(action: call.arguments as String);
+      case _triggerActionChannelMethod:
+        return _triggerAction(action: call.arguments as String);
       default:
         throw MissingPluginException();
         break;
