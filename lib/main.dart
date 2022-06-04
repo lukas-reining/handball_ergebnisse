@@ -35,11 +35,7 @@ final notificationRegistrationService = NotificationRegistrationService();
 final notificationActionService = NotificationActionService();
 
 void registerNotifications() async {
-  if (!await notificationRegistrationService.isRegistered()) {
-    await notificationRegistrationService.registerDevice();
-  } else {
-    await notificationRegistrationService.refreshRegistration();
-  }
+  await notificationRegistrationService.registerDevice();
 
   notificationActionService.actionTriggered.listen((event) {
     print(event);
