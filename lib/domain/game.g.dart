@@ -11,7 +11,9 @@ Game _$GameFromJson(Map<String, dynamic> json) => Game(
       json['number'] as int,
       json['h4aLeagueId'] as String,
       json['h4aGymnasiumId'] as String,
-      DateTime.parse(json['dateTime'] as String),
+      json['dateTime'] == null
+          ? null
+          : DateTime.parse(json['dateTime'] as String),
       TeamGameResults.fromJson(json['teams'] as Map<String, dynamic>),
       json['reportUrl'] as String,
       json['live'] as bool,
@@ -24,7 +26,7 @@ Map<String, dynamic> _$GameToJson(Game instance) => <String, dynamic>{
       'number': instance.number,
       'h4aLeagueId': instance.h4aLeagueId,
       'h4aGymnasiumId': instance.h4aGymnasiumId,
-      'dateTime': instance.dateTime.toIso8601String(),
+      'dateTime': instance.dateTime?.toIso8601String(),
       'teams': instance.teams,
       'reportUrl': instance.reportUrl,
       'live': instance.live,

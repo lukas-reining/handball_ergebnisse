@@ -9,7 +9,7 @@ class Game {
 
   final String h4aLeagueId;
   final String h4aGymnasiumId;
-  final DateTime dateTime;
+  final DateTime? dateTime;
 
   final TeamGameResults teams;
 
@@ -40,7 +40,8 @@ class Game {
 
   bool get hasData => (teams.home.goals + teams.guest.goals) > 0;
 
-  bool get isOver => dateTime.add(Duration(hours: 2)).isBefore(DateTime.now());
+  bool get isOver =>
+      dateTime?.add(Duration(hours: 2)).isBefore(DateTime.now()) ?? false;
 
   bool get hasReport => !reportUrl.endsWith("=0");
 

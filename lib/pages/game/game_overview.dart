@@ -51,7 +51,10 @@ class _GameOverviewPageState extends State<GameOverviewPage> {
                 ListTile(
                   title: Text("Beginn"),
                   subtitle: Text(
-                    _dateTimeFormat.format(widget.game.dateTime.toLocal()),
+                    widget.game.dateTime != null
+                        ? _dateTimeFormat
+                            .format(widget.game.dateTime!.toLocal())
+                        : "Noch nicht festgelegt",
                   ),
                 ),
                 BlocBuilder<SportsHallBloc, ApiState<SportsHall>>(

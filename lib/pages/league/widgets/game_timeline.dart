@@ -38,7 +38,8 @@ class _GameTimelineState extends State<GameTimeline> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    return widget.games.firstWhere((game) => game.dateTime.isAfter(today),
+    return widget.games.firstWhere(
+        (game) => game.dateTime?.isAfter(today) ?? false,
         orElse: () => widget.games.last);
   }
 
@@ -92,7 +93,9 @@ class _GameTimelineState extends State<GameTimeline> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _dateTimeFormat.format(game.dateTime.toLocal()),
+                    game.dateTime != null
+                        ? _dateTimeFormat.format(game.dateTime!.toLocal())
+                        : "Noch nicht festgelegt",
                     style: TextStyle(color: Colors.grey),
                   ),
                   SizedBox(
@@ -152,7 +155,12 @@ class _GameTimelineState extends State<GameTimeline> {
 
   List<Game> _sortByDate(List<Game> games) {
     final sorted = [...games];
-    sorted.sort((game1, game2) => game1.dateTime.compareTo(game2.dateTime));
+    sorted
+        .sort((game1, game2) => game1.dateTime != null && game2.dateTime != null
+            ? game1.dateTime!.compareTo(game2.dateTime!)
+            : game1.dateTime != null
+                ? -1
+                : 1);
     return sorted;
   }
 
