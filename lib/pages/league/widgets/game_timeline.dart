@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handball_ergebnisse/domain/game.dart';
 import 'package:handball_ergebnisse/pages/game/game_overview.dart';
+import 'package:handball_ergebnisse/pages/league/widgets/no_games_view.dart';
 import 'package:intl/intl.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:timelines/timelines.dart';
@@ -26,7 +27,9 @@ class _GameTimelineState extends State<GameTimeline> {
 
   @override
   void initState() {
-    final nextGameIndex = widget.games.indexOf(nextGame);
+    final nextGameIndex =
+        nextGame != null ? widget.games.indexOf(nextGame!) : 0;
+
     _scrollController = ScrollController(
       initialScrollOffset: nextGameIndex * widget._tileHeight,
     );
@@ -34,7 +37,11 @@ class _GameTimelineState extends State<GameTimeline> {
     super.initState();
   }
 
-  Game get nextGame {
+  Game? get nextGame {
+    if (widget.games.isEmpty) {
+      return null;
+    }
+
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
@@ -45,6 +52,10 @@ class _GameTimelineState extends State<GameTimeline> {
 
   @override
   Widget build(context) {
+    if (widget.games.isEmpty) {
+      return Center(child: NoGamesView());
+    }
+
     return Timeline.tileBuilder(
       controller: _scrollController,
       theme: TimelineThemeData(

@@ -5,6 +5,7 @@ import 'package:handball_ergebnisse/bloc/domain/favorite_leagues_bloc.dart';
 import 'package:handball_ergebnisse/bloc/domain/league_bloc.dart';
 import 'package:handball_ergebnisse/bloc/favorites/states.dart';
 import 'package:handball_ergebnisse/domain/repositories/league.dart';
+import 'package:handball_ergebnisse/pages/home/widgets/no_leagues_view.dart';
 
 import '../../widgets/handball_progress_indicator.dart';
 import 'league_card.dart';
@@ -28,6 +29,10 @@ class _FavoriteLeaguesOverviewState extends State<FavoriteLeaguesOverview> {
         bloc: BlocProvider.of<FavoriteLeaguesBloc>(context),
         builder: (context, state) {
           if (state is FavoritesInitializedState<String>) {
+            if (state.favorites.isEmpty) {
+              return Center(child: NoLeaguesView());
+            }
+
             return ListView(
               children: state.favorites
                   .map(
